@@ -1,5 +1,5 @@
 const User = require("../user/user.model");
-
+const Category = require("../category/category.model");
 const {
   createBook,
   getAllBook,
@@ -10,7 +10,8 @@ const {
 
 const createBookController = async (req, res) => {
   try {
-    const { title, description, status } = req.body;
+    const data = req.body;
+    const { categoryId } = data;
     const { _id } = req.user;
     const userId = _id.toString();
     const user = await User.findById(userId);
@@ -18,17 +19,22 @@ const createBookController = async (req, res) => {
     if (!user) {
       throw new Error("User not found");
     }
+    const category = await Category.findById(categoryId);
+    if (!category) {
+      return res.status(404).json({ message: "Categoría no encontrada" });
+    }
 
     const newBook = {
-      title,
-      description,
-      status,
-      user: userId, // This is the user id is required to create a book
+      ...data,
+      user: userId,
+      category: category, // This is the user id is required to create a book
     };
 
     const book = await createBook(newBook);
     user.books.unshift(book);
     await user.save({ validateBeforeSave: false });
+    category.books.unshift(book);
+    await category.save({ validateBeforeSave: false });
 
     res.status(201).json({ message: "book created", data: book });
   } catch (error) {

@@ -11,7 +11,7 @@ const createUser = async (data) => {
 
 const listUsers = async () => {
   try {
-    const users = await User.find().select("name email").populate({
+    const users = await User.find().select("firstName email").populate({
       path: "books",
       select: "title description status",
     });

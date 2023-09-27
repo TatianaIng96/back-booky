@@ -11,10 +11,12 @@ const createBook = async (data) => {
 
 const getAllBook = async () => {
   try {
-    const books = await Book.find().select("title body completed").populate({
-      path: "user",
-      select: "name email -_id",
-    });
+    const books = await Book.find()
+      .select("title author status price image")
+      .populate({
+        path: "user",
+        select: "_id",
+      });
     return books;
   } catch (error) {
     throw new Error(error);

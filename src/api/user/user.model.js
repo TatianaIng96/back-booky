@@ -4,7 +4,13 @@ const emailRegex = new RegExp("[a-zA-Z0-9]{5,10}@[a-z]{3,10}.com");
 
 const userSchema = new Schema(
   {
-    name: {
+    firstName: {
+      type: String,
+      required: [true, "Name is required"],
+      minlength: [2, "Name must be at least 2 characters long"],
+      maxlength: [15, "Name must be at most 15 characters long"],
+    },
+    lastName: {
       type: String,
       required: [true, "Name is required"],
       minlength: [2, "Name must be at least 2 characters long"],
@@ -30,6 +36,10 @@ const userSchema = new Schema(
     password: {
       type: String,
       required: [true, "Password is required"],
+    },
+    adress: {
+      type: String,
+      required: [true, "adress is required"],
     },
     validateToken: {
       type: String,

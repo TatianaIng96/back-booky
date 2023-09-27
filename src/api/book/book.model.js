@@ -19,9 +19,26 @@ const bookSchema = new Schema(
       enum: ["NEW", "USED"],
       default: "NEW",
     },
+    author: {
+      type: String,
+      required: true,
+    },
+    image: {
+      type: String,
+      required: true,
+    },
+    price: {
+      type: Number,
+      required: true,
+    },
     user: {
       type: Schema.Types.ObjectId,
       ref: "user",
+      required: true,
+    },
+    category: {
+      type: Schema.Types.ObjectId,
+      ref: "category",
       required: true,
     },
   },

@@ -33,12 +33,10 @@ exports.loginHandler = async (req, res) => {
     };
 
     const token = signToken(payload);
-
     const profile = {
-      name: user.name,
+      firstName: user.firstName,
       email: user.email,
     };
-    console.log(profile);
 
     return res.status(201).json({ token, profile });
   } catch (error) {
