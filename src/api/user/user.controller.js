@@ -3,6 +3,8 @@ const {
   hashPassword,
   createValidationToken,
 } = require("../../auth/utils/bcrypt");
+const { sendNodeMailer } = require("../../config/nodemailer");
+const { welcomeEmail } = require("../../utils/email");
 
 const userCreateController = async (req, res) => {
   try {
@@ -18,6 +20,8 @@ const userCreateController = async (req, res) => {
     };
 
     const user = await createUser(data);
+    await sendNodeMailer(welcomeEmail(user));
+    //sendMailSendGrid(welcomeEmailSG(user))
 
     res.status(201).json({ message: "User created", data: user });
   } catch (error) {

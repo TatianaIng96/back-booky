@@ -11,7 +11,7 @@ const createUser = async (data) => {
 
 const listUsers = async () => {
   try {
-    const users = await User.find().select("firstName email").populate({
+    const users = await User.find().select().populate({
       path: "books",
       select: "title description status",
     });
@@ -51,16 +51,15 @@ const getUserByEmail = async (email) => {
   }
 };
 
-const updateUser = async (userId, newData) => {
+const updateUser = async (id, newData) => {
   try {
-    const updatedUser = await User.findByIdAndUpdate(userId, newData, {
+    const updatedUser = await User.findByIdAndUpdate(id, newData, {
       new: true,
     });
 
     if (!updatedUser) {
       throw new Error("No se encontró el usuario para actualizar.");
     }
-
     return updatedUser;
   } catch (error) {
     throw error;

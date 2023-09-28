@@ -28,7 +28,7 @@ exports.loginHandler = async (req, res) => {
     }
 
     const payload = {
-      id: user.id,
+      id: user._id,
       email: user.email,
     };
 
@@ -51,7 +51,6 @@ exports.activateAccountHandler = async (req, res) => {
   const { token } = req.params;
   try {
     const user = await getUserByValidateToken(token);
-
     if (!user) {
       return res.status(404).json({ message: "Invalid credentials" });
     }
@@ -63,22 +62,18 @@ exports.activateAccountHandler = async (req, res) => {
     }
 
     const data = {
-      ...user,
-      tokenExpires: null,
-      validateToken: null,
+      isActive: true,
     };
-
     await updateUser(user.id, data);
-
     const payload = {
-      id: user.id,
+      id: user._id,
       email: user.email,
     };
 
     const tokenToSend = signToken(payload);
 
     const profile = {
-      firstName: user.name,
+      firstName: user.firstName,
       email: user.email,
     };
 

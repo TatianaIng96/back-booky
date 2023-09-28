@@ -44,11 +44,18 @@ const userSchema = new Schema(
     validateToken: {
       type: String,
       unique: true,
-      required: [true, "Token is required"],
+      required: false, // Permite que este campo sea nulo
+      default: null,
     },
     tokenExpires: {
       type: Date,
+      required: false, // Permite que este campo sea nulo
+      default: null,
+    },
+    isActive: {
+      type: Boolean,
       required: true,
+      default: false,
     },
     books: {
       type: [{ type: Schema.Types.ObjectId, ref: "book" }],
