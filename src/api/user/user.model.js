@@ -61,6 +61,10 @@ const userSchema = new Schema(
       type: [{ type: Schema.Types.ObjectId, ref: "book" }],
       required: false,
     },
+    transactions: {
+      type: [{ type: Schema.Types.ObjectId, ref: "transaction" }],
+      required: false,
+    },
   },
   {
     timestamps: true,
