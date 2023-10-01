@@ -1,20 +1,34 @@
 // Importa el modelo de transacción
 const Transaction = require("./transaction.model");
 const User = require("../user/user.model");
+const Stripe = require("stripe");
+
+const STRIPE_SECRET_KEY = process.env.STRIPE_SECRET_KEY;
+const stripe = new Stripe(STRIPE_SECRET_KEY, {
+  apiVersion: "2023-08-16",
+});
+
 // Crear una nueva transacción
 const createTransaction = async (req, res) => {
   try {
-    const { totalAmount, books, sellerId, buyerId } = req.body;
+    const { paymentMethod, totalAmount, books, sellerId, buyerId } = req.body;
+    const montoCentavos = Math.round(totalAmount * 100);
+    const { id } = paymentMethod;
+    const payment = await stripe.paymentIntents.create({
+      payment_method: id,
+      amount: montoCentavos,
+      currency: "usd",
+      confirm: true,
+      description: "Software development services provided",
+      return_url: "http://localhost:3000/home",
+    });
 
-    // Crea una nueva instancia de Transaction
     const newTransaction = new Transaction({
-      totalAmount,
+      totalAmount: montoCentavos,
       books,
       sellerId,
       buyerId,
     });
-
-    // Guarda la transacción en la base de datos
     const savedTransaction = await newTransaction.save();
     const userBuyer = await User.findById(buyerId);
     userBuyer.transactions.unshift(savedTransaction);
@@ -22,9 +36,9 @@ const createTransaction = async (req, res) => {
     const userSeller = await User.findById(sellerId);
     userSeller.transactions.unshift(savedTransaction);
     await userSeller.save({ validateBeforeSave: false });
-    res.status(201).json(savedTransaction);
+    res.status(201).json({ message: "Payment successful", payment });
   } catch (error) {
-    res.status(500).json({ error: "Error al crear la transacción" });
+    return res.status(500).json({ message: error.message });
   }
 };
 

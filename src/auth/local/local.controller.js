@@ -36,6 +36,7 @@ exports.loginHandler = async (req, res) => {
     const profile = {
       firstName: user.firstName,
       email: user.email,
+      id: user.id,
     };
 
     return res.status(201).json({ token, profile });
@@ -75,6 +76,7 @@ exports.activateAccountHandler = async (req, res) => {
     const profile = {
       firstName: user.firstName,
       email: user.email,
+      id: user.id,
     };
 
     return res.status(201).json({ token: tokenToSend, profile });
