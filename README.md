@@ -64,3 +64,5 @@ Response:
 ### Developing
 
 1. Run `npm install` to install server dependencies.
+2. Configure the .env file.
+3. Run npm run dev to start the development server.
