@@ -5,8 +5,7 @@ let connection;
 const connect = async () => {
   if (connection) return;
 
-  const MONGO_URI =
-    "mongodb+srv://root:1234@database30.4tcre02.mongodb.net/booky";
+  const MONGO_URI = process.env.MONGO_URI;
 
   connection = mongoose.connection;
 
